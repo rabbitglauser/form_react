@@ -2,6 +2,35 @@ import React from 'react';
 import './App.css';
 import {useForm} from 'react-hook-form';
 
+interface FormElements extends HTMLFormControlsCollection {
+    usernameInput: HTMLInputElement
+}
+
+interface UsernameFormElement extends HTMLFormElement {
+    readonly elements: FormElements
+}
+
+function UsernameForm({
+                          onSubmitUsername,
+                      }: {
+    onSubmitUsername: (username: string) => void
+}) {
+    function handleSubmit(event: React.FormEvent<UsernameFormElement>) {
+        event.preventDefault()
+        onSubmitUsername(event.currentTarget.elements.usernameInput.value)
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label htmlFor="usernameInput">Username:</label>
+                <input id="usernameInput" name='usernameInput' type="text"/>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+
 function App() {
     const {register} = useForm();
     return (
@@ -46,6 +75,8 @@ function App() {
                     }
                 })} />
             </div>
+            <UsernameForm onSubmitUsername={(username: string) => alert(`pls fill ou the form first before submitting the document: ${username}`)}/>
+            <div></div>
         </>
     );
 }
